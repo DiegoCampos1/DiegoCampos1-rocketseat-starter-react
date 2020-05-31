@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import api from '../../services/api';
+import './styles.css'
 
 export default class Main extends Component {
+  state = {
+    products: [],
+  }
+
   componentDidMount() {
     this.loadProducts();
   }
@@ -9,10 +14,25 @@ export default class Main extends Component {
   loadProducts = async () => {
     const response = await api.get();
 
-    console.log(response.data.results);
+    this.setState({ products: response.data.results})
   }
-
+  
   render () {
-    return <h1>Hello world!!</h1>
+    const { products } = this.state
+    
+    return(
+      <div className="product-list">
+      {products.map(product => (
+        <article key={product.id}>
+          <strong>{product.title}</strong>
+          <img src={product.thumbnail} alt={`${product.title}`}></img>
+          <p>R$ {(product.price.toFixed(2).toLocaleString('pt-BR'))}</p>
+        
+          <a href="">Acessar</a>
+        </article>
+        
+      ))}
+    </div>
+  )
   }
 }
