@@ -1,11 +1,13 @@
-import React, { Component } from 'react';
-import api from '../../services/api';
-import './styles.css'
+import React, { Component } from "react";
+import api from "../../services/api";
+import { Link } from "react-router-dom";
+
+import "./styles.css";
 
 export default class Main extends Component {
   state = {
     products: [],
-  }
+  };
 
   componentDidMount() {
     this.loadProducts();
@@ -14,25 +16,24 @@ export default class Main extends Component {
   loadProducts = async () => {
     const response = await api.get();
 
-    this.setState({ products: response.data.results})
-  }
-  
-  render () {
-    const { products } = this.state
-    
-    return(
+    this.setState({ products: response.data.results });
+  };
+
+  render() {
+    const { products } = this.state;
+
+    return (
       <div className="product-list">
-      {products.map(product => (
-        <article key={product.id}>
-          <strong>{product.title}</strong>
-          <img src={product.thumbnail} alt={`${product.title}`}></img>
-          <p>R$ {(product.price.toFixed(2).toLocaleString('pt-BR'))}</p>
-        
-          <a href="">Acessar</a>
-        </article>
-        
-      ))}
-    </div>
-  )
+        {products.map((product) => (
+          <article key={product.id}>
+            <strong>{product.title}</strong>
+            <img src={product.thumbnail} alt={`${product.title}`}></img>
+            <p>R$ {product.price.toFixed(2).toLocaleString("pt-BR")}</p>
+
+            <Link to={`/products/${product.id}`}>Acessar</Link>
+          </article>
+        ))}
+      </div>
+    );
   }
 }
